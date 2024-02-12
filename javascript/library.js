@@ -38,13 +38,26 @@ function displayBooks() {
     } else {
       borrowButton.textContent = "Borrow";
     }
-
     borrowButton.addEventListener("click", () => toggleBorrowStatus(book));
     li.appendChild(borrowButton);
+
+    const removeButton = document.createElement("button");
+    removeButton.className = "remove_button";
+    removeButton.textContent = "Remove";
+    removeButton.addEventListener("click", () => removed(book));
+    li.appendChild(removeButton);
     bookList.appendChild(li);
   });
 
 }
+function removed(book) {
+  const removeList = library.findIndex(b => b.id === book.id);
+  if (removeList !== -1) {
+    library.splice(removeList, 1);
+    displayBooks();
+  }
+}
+
 
 function toggleBorrowStatus(book) {
   book.isBorrowed = !book.isBorrowed;
