@@ -1,5 +1,17 @@
 let library = [];
 
+if (localStorage.getItem("library")) {
+  library = localStorage.getItem("library").split(';').map(bookString => {
+    const [id, title, author, isBorrowed] = bookString.split(',');
+    return { id, title, author, isBorrowed: isBorrowed === true };
+  });
+  displayBooks();
+}
+function saveToStorage() {
+  const savedLibrary = library.map(book => `${book.id},${book.title},${book.author},${book.isBorrowed}`).join(';');
+  localStorage.setItem("library", savedLibrary);
+}
+
 function addBook() {
   const bookId = document.getElementById("book_id").value;
   const bookTitle = document.getElementById("book_title").value;
@@ -20,6 +32,8 @@ function addBook() {
   library.push(newBook);
   displayBooks();
   clearFields();
+
+  saveToStorage();
 }
 
 function displayBooks() {
@@ -55,6 +69,7 @@ function removed(book) {
   if (removeList !== -1) {
     library.splice(removeList, 1);
     displayBooks();
+    saveToStorage();
   }
 }
 
